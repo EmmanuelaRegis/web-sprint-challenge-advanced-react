@@ -13,6 +13,8 @@ const initialState = {
   email: initialEmail,
   index: initialIndex,
   steps: initialSteps,
+  x: 2,
+  y: 2
 }
 
 export default class AppClass extends React.Component {
@@ -20,40 +22,88 @@ state = initialState
 
 move = (evt) => {
   const direction = evt.target.id
-  const nextIndex = this.getNextIndex(direction)
+ // const nextIndex = this.getNextIndex(direction)
   console.log('current index', this.state.index)
-  console.log('next index', nextIndex)
-  if (nextIndex !== this.state.index) {
-    this.setState({
-      ...this.state,
-      steps: this.state.steps + 1,
-      message: 'initialMessage',
-      index: nextIndex 
-    })
-  } else {
-    this.setState({
-      ...this.state,
-      message: `you can't go ${direction}`
-    })
+  if (direction === 'up') {
+    if (this.state.index > 2) {
+      this.setState({
+        ...this.state,
+        index: this.state.index - 3,
+        steps: this.state.steps + 1,
+        x: this.state.x - 1
+      })
+
+    } else {
+      this.setState ({
+        ...this.state,
+        message: "you can't go up"
+      })
+    }
   }
+
+  if (direction === 'down') {
+    if (this.state.index < 7 ) {
+      this.setState ({
+        ...this.state,
+        index: this.state. index + 3,
+        steps : this.state.steps + 1,
+        x: this.state.x + 1
+      })
+    } else {
+      this.setState ({
+        ...this.state,
+        message: "you can't go down"
+      })
+    }
+  }
+
+  if (direction === 'left') {
+    if (this.state.index !== 0 && this.state.index !== 3 && this.state.index !== 6 ) {
+      this.setState ({
+        ...this.state,
+        index: this.state.index - 1,
+        steps : this.state.steps + 1,
+        y: this.state.y + 1
+      })
+    } else {
+      this.setState ({
+        ...this.state,
+        message: "you can't go left"
+      })
+    }
+  }
+
+  if (direction === 'right') {
+    if (this.state.index !== 2 && this.state.index !== 5 && this.state.index !== 8 ) {
+      this.setState ({
+        ...this.state,
+        index: this.state.index + 1,
+        steps : this.state.steps + 1,
+        y: this.state.y - 1
+      })
+    } else {
+      this.setState ({
+        ...this.state,
+        message: "you can't go right"
+      })
+    }
+  }
+
+  reset = () => {
+    this.setState({
+        message: initialMessage,
+        email: initialEmail,
+        index: initialIndex,
+        steps: initialSteps,
+        x: 2,
+        y: 2
+    })
+    
+  };
 }
-  // handleClick =  (direction) => {
-  //   if(direction = 'left') {
-  //     if(this.state.index === 0 || this.state.index === 3 || this.state.index === 6) {
-  //       this.setState({
-  //         ...this.state, 
-  //         message: 'you cannot move left'
-  //       })
-  //     } else {
-  //       this.setState({
-  //         ...this.state,
-  //         index: this.state.index - 1
-  //       })
-  //     }
-  //   }
 
   getNextIndex = (direction) => {
-    if(direction = 'upon') {
+    if(direction = 'up') {
       return index < 3 ? index : index - 3
     } else if (direction = 'down') {
       return index > 5 ? index: index + 3
@@ -63,38 +113,8 @@ move = (evt) => {
        return (index -2) % 3 === 0 ? index :index + 1
       }
   }
-   // if(initialIndex[idx]) {
-    //  this.setState({
-    //    ...this.state,
-   //     message: ' Wrong'
-   //   })
-   // } else {
 
-  //  }
-  //console.log(idx);
- //   const newInitialIndex = [initialIndex];
- //   newInitialIndex[idx] = initialSteps;
- //   this.setState({
- //     ...this.state,
- //     initialIndex: newInitialIndex,
- //     currentTurn: this.toggleTurn(initialIndex),
- //   });
 
-  toggleTurn = (currentTurn) => {
-    if (currentTurn === 'B') {
-      return '0';
-    } else {
-      return 'B'
-    }
-
-  }
-
-  reset = () => {
-    this.setState({
-      initialState
-    })
-    
-  };
   // THE FOLLOWING HELPERS ARE JUST RECOMMENDATIONS.
   // You can delete them and build your own logic from scratch.
 
@@ -130,16 +150,26 @@ move = (evt) => {
 
   //onSubmit = (evt) => {
     // Use a POST request to send a payload to the server.
+
  // }
 
+ // toggleTurn = (currentTurn) => {
+ //   if (currentTurn === 'B') {
+ //     return '0';
+ //   } else {
+ //     return 'B'
+ //   }
+
+ // }
+ 
   render() {
-    const {steps, index, message, email} = this.state;
+    const {steps, index, message, email, x, y} = this.state;
     const { className } = this.props;
     return (
       <div id="wrapper" className={className}>
         <div className="info">
-          <h3 id="coordinates">{initialMessage}</h3>
-          <h3 id="steps">You moved {initialSteps} times</h3>
+        <h3 id="coordinates">Coordinates ({x}, {y})</h3>
+          <h3 id="steps">You moved {steps} time{steps !== 1 && 's'}</h3>
         </div>
         <div id="grid">
           {
@@ -155,10 +185,10 @@ move = (evt) => {
         </div>
         <div id="keypad">
           <button id="left" onClick= {this.move}>LEFT</button>
-          <button id="upon"onClick= {this.move}>UP</button>
+          <button id="up"onClick= {this.move}>UP</button>
           <button id="right" onClick= {this.move}>RIGHT</button>
           <button id="down" onClick= {this.move}>DOWN</button>
-          <button id="reset">reset</button>
+          <button  onClick= {this.reset}id="reset">reset</button>
         </div>
         <form>
           <input id="email" type="email" placeholder="type email"></input>
