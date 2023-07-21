@@ -42,7 +42,7 @@ move = (evt) => {
   }
 
   if (direction === 'down') {
-    if (this.state.index < 7 ) {
+    if (this.state.index < 6 ) {
       this.setState ({
         ...this.state,
         index: this.state. index + 3,
@@ -88,19 +88,18 @@ move = (evt) => {
       })
     }
   }
-
-  reset = () => {
-    this.setState({
-        message: initialMessage,
-        email: initialEmail,
-        index: initialIndex,
-        steps: initialSteps,
-        x: 2,
-        y: 2
-    })
-    
-  };
 }
+  reset = () => {
+    this.setState(initialState)
+  };
+
+  onChange = (event) => {
+    this.setState ({
+      ...this.state,
+      email: event.target.value
+    })
+  };
+  
 
   getNextIndex = (direction) => {
     if(direction = 'up') {
@@ -191,7 +190,7 @@ move = (evt) => {
           <button  onClick= {this.reset}id="reset">reset</button>
         </div>
         <form>
-          <input id="email" type="email" placeholder="type email"></input>
+          <input onChange={this.onChange} value={email} id="email" type="email" placeholder="type email"></input>
           <input id="submit" type="submit"></input>
         </form>
       </div>
